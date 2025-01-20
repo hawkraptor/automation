@@ -156,16 +156,15 @@ most_recent_folder = sorted(
 source_folder = os.path.join(source_path, most_recent_folder)
 destination_folder = os.path.join(destination_path, most_recent_folder)
 
-# Check if there is enough space in the destination folder
-if not check_storage(source_folder, destination_path):
-    delete_oldest_folder(destination_path)
-    if not check_storage(source_folder, destination_path):
-        print(colored("Still not enough free space after deletion. Aborting operation.", "light_red", attrs=["blink"]))
-        sys.exit(1)
-
 copy_or_compare = input("Would you like to copy the files (y) or only attempt to compare existing hashes (n)? ")
 
 if copy_or_compare == "y":
+    # Check if there is enough space in the destination folder
+    if not check_storage(source_folder, destination_path):
+        delete_oldest_folder(destination_path)
+        if not check_storage(source_folder, destination_path):
+            print(colored("Still not enough free space after deletion. Aborting operation.", "light_red", attrs=["blink"]))
+            sys.exit(1)
     print(colored(f"Copying folder {os.path.join(source_path, most_recent_folder)} to internal storage","light_green"))
     # Copy the most recent folder to the destination path
     #shutil.copytree(os.path.join(source_path, most_recent_folder), os.path.join(destination_path, most_recent_folder), dirs_exist_ok=True)
